@@ -25,9 +25,6 @@ public class WireMockExercises1Tests {
 	    when().
 	        get("http://localhost:9876/exercise101").
 	    then().
-	    	log().
-	    	body().
-	    	and().
 	        assertThat().
 	        statusCode(200);
 	}
@@ -41,9 +38,6 @@ public class WireMockExercises1Tests {
 	    when().
 	        get("http://localhost:9876/exercise102").
 	    then().
-	    	log().
-	    	body().
-	    	and().
 	        assertThat().
 	        contentType(ContentType.TEXT);
 	}
@@ -57,9 +51,6 @@ public class WireMockExercises1Tests {
 	    when().
 	        get("http://localhost:9876/exercise103").
 	    then().
-	    	log().
-	    	body().
-	    	and().
 	        assertThat().
 	        body(equalTo("Exercise 103"));
 	}
