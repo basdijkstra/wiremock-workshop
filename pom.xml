@@ -6,6 +6,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>WireMock Workshop</name>
 	<description>Project containing examples, exercises and answers for the WireMock workshop</description>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.tomakehurst</groupId>
