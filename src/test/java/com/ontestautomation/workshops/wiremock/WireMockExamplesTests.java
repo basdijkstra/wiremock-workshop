@@ -1,10 +1,13 @@
 package com.ontestautomation.workshops.wiremock;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import java.util.concurrent.TimeUnit;
 
+import com.github.tomakehurst.wiremock.extension.responsetemplating.*;
+import io.restassured.http.ContentType;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -15,7 +18,10 @@ public class WireMockExamplesTests {
 	WireMockExamples wme = new WireMockExamples();	
 	
 	@Rule
-	public WireMockRule wireMockRule = new WireMockRule(9876);
+	public WireMockRule wm = new WireMockRule(wireMockConfig()
+			.port(9876)
+			.extensions(new ResponseTemplateTransformer(false))
+	);
 	
 	@Test
 	public void testPingPongPositive() {
@@ -147,4 +153,34 @@ public class WireMockExamplesTests {
 			assertThat().
 			body(equalTo("There is 1 item in your shopping cart"));
 	}
+
+	@Test
+	public void testResponseTemplateHttpMethodStub() {
+
+		wme.setupStubResponseTemplatingHttpMethod();
+
+		given().
+		when().
+			post("http://localhost:9876/template-http-method").
+		then().
+			assertThat().
+			body(equalTo("POST"));
+	}
+
+	@Test
+	public void testResponseTemplateJsonBodyStub() {
+
+		wme.setupStubResponseTemplatingJsonBody();
+
+		given().
+			contentType(ContentType.JSON).
+			body("{\"book\": {\"author\": \"Ken Follett\", \"title\": \"Pillars of the Earth\",\"published\": 2002}}").
+		when().
+			post("http://localhost:9876/template-json-body").
+		then().
+			assertThat().
+			body(equalTo("Pillars of the Earth"));
+	}
 }
+
+

@@ -104,5 +104,22 @@ public class WireMockExamples {
 						.withBody("There is 1 item in your shopping cart")
 				));
 	}
-	
+
+	public void setupStubResponseTemplatingHttpMethod() {
+
+		stubFor(any(urlEqualTo("/template-http-method"))
+				.willReturn(aResponse()
+						.withBody("{{request.requestLine.method}}")
+						.withTransformers("response-template")
+				));
+	}
+
+	public void setupStubResponseTemplatingJsonBody() {
+
+		stubFor(post(urlEqualTo("/template-json-body"))
+				.willReturn(aResponse().
+						withBody("{{jsonPath request.body '$.book.title'}}").
+						withTransformers("response-template")
+				));
+	}
 }
