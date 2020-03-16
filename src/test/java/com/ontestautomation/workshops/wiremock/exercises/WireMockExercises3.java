@@ -1,44 +1,79 @@
 package com.ontestautomation.workshops.wiremock.exercises;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
+import org.junit.*;
 
-import com.github.tomakehurst.wiremock.http.Fault;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static io.restassured.RestAssured.given;
 
 public class WireMockExercises3 {
-	
-	public WireMockExercises3() {
-	}
-	
-	public void setupStubExercise301() {
 
-		/************************************************
-		 * Create a stub that listens at path
-		 * /exercise301
-		 * and responds to all GET requests with HTTP
-		 * status code 503 and a status message equal to
-		 * 'Service unavailable'
-		 ************************************************/
+    private RequestSpecification requestSpec;
 
-	}
-	
-	public void setupStubExercise302() {
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(9876);
 
-		/************************************************
-		 * Create a stub that listens at path
-		 * /exercise302
-		 * and responds to all GET requests with a fixed
-		 * delay of 2000 milliseconds
-		 ************************************************/
+    @Before
+    public void createRequestSpec() {
 
-	}
-	
-	public void setupStubExercise303() {
+        requestSpec = new RequestSpecBuilder().
+            setBaseUri("http://localhost").
+            setPort(9876).
+            build();
+    }
 
-		/************************************************
-		 * Create a stub that listens at path
-		 * /exercise303
-		 * and responds to all GET requests with garbage
-		 ************************************************/
+    public void setupStubExercise301() {
 
-	}
+        /************************************************
+         * Create a stub that exerts the following behavior:
+         * - The scenario is called 'Stateful mock exercise'
+         * - 1. A first GET to /nl/3825 returns HTTP 404
+         * - 2. A POST to /nl/3825 with body 'DATA FOR /nl/3825' returns HTTP 201
+         * 		and causes a transition to state 'DATA_CREATED'
+         * - 3. A second GET (when in state 'DATA_CREATED ') to /nl/3825
+         *      returns HTTP 200 and body "DATA FOR /nl/3825"
+         ************************************************/
+
+    }
+
+    @Test
+    public void testExercise301() {
+
+        /***
+         * Use this test to test the Java implementation of exercise 301
+         */
+
+        setupStubExercise301(); // Only needed for the Java implementation
+
+        given().
+            spec(requestSpec).
+        when().
+            get("/nl/3825").
+        then().
+            assertThat().
+            statusCode(404);
+
+        given().
+            spec(requestSpec).
+        and().
+            body("DATA FOR /nl/3825").
+        when().
+            post("/nl/3825").
+        then().
+            assertThat().
+            statusCode(201);
+
+        given().
+            spec(requestSpec).
+        when().
+            get("/nl/3825").
+        then().
+            assertThat().
+            statusCode(200).
+        and().
+            body(org.hamcrest.Matchers.equalTo("DATA FOR /nl/3825"));
+    }
 }

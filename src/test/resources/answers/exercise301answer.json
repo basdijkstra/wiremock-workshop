@@ -1,0 +1,44 @@
+{
+  "mappings": [
+    {
+      "scenarioName": "Stateful mock exercise",
+      "requiredScenarioState": "Started",
+      "request": {
+        "method": "GET",
+        "url": "/nl/3825"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+
+    {
+      "scenarioName": "Stateful mock exercise",
+      "requiredScenarioState": "Started",
+      "newScenarioState": "DATA_CREATED",
+      "request": {
+        "method": "POST",
+        "url": "/nl/3825",
+        "bodyPatterns": [
+          { "equalTo": "DATA FOR /nl/3825" }
+        ]
+      },
+      "response": {
+        "status": 201
+      }
+    },
+
+    {
+      "scenarioName": "Stateful mock exercise",
+      "requiredScenarioState": "DATA_CREATED",
+      "request": {
+        "method": "GET",
+        "url": "/nl/3825"
+      },
+      "response": {
+        "status": 200,
+        "body" : "DATA FOR /nl/3825"
+      }
+    }
+  ]
+}
