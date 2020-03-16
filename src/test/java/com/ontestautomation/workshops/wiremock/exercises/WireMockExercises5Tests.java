@@ -1,8 +1,7 @@
-package com.ontestautomation.workshops.wiremock;
+package com.ontestautomation.workshops.wiremock.exercises;
 
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.ontestautomation.workshops.wiremock.answers.WireMockAnswers5;
 import io.restassured.http.ContentType;
 import org.junit.Rule;
 import org.junit.Test;

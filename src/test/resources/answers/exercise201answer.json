@@ -1,0 +1,10 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/servicedown"
+    },
+    "response": {
+        "status": 503,
+        "statusMessage": "Service unavailable"
+    }
+}

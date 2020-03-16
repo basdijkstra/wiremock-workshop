@@ -1,0 +1,9 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/fault"
+    },
+    "response": {
+        "fault": "RANDOM_DATA_THEN_CLOSE"
+    }
+}

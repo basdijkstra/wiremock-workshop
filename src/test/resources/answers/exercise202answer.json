@@ -1,0 +1,15 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/slow",
+        "headers": {
+            "speed": {
+                "equalTo": "slow"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "fixedDelayMilliseconds": 3000
+    }
+}

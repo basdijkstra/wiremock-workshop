@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock;
+package com.ontestautomation.workshops.wiremock.exercises;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;

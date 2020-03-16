@@ -1,15 +1,17 @@
-package com.ontestautomation.workshops.wiremock.answers;
+package com.ontestautomation.workshops.wiremock.exercises;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers1 {
+public class WireMockExercises1 {
 
 	private RequestSpecification requestSpec;
 
@@ -32,10 +34,6 @@ public class WireMockAnswers1 {
 		 * to /pl/80-862 with an HTTP status code 200
 		 ************************************************/
 
-		stubFor(post(urlEqualTo("/pl/80-862"))
-				.willReturn(aResponse()
-						.withStatus(200)
-				));
 	}
 	
 	public void setupStubExercise102() {
@@ -45,11 +43,7 @@ public class WireMockAnswers1 {
 		 * to /pl/80-863 with a response that contains
 		 * a Content-Type header with value text/plain
 		 ************************************************/
-		
-		stubFor(post(urlEqualTo("/pl/80-863"))
-				.willReturn(aResponse()
-						.withHeader("Content-Type", "text/plain")
-				));
+
 	}
 	
 	public void setupStubExercise103() {
@@ -59,10 +53,6 @@ public class WireMockAnswers1 {
 		 * to /pl/80-864 with a response body 'Posted!'
 		 ************************************************/
 
-		stubFor(post(urlEqualTo("/pl/80-864"))
-				.willReturn(aResponse()
-						.withBody("Posted!")
-				));
 	}
 
 	@Test
