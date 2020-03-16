@@ -1,0 +1,11 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/echo-car-model"
+    },
+    "response": {
+        "status": 200,
+        "body": "{{jsonPath request.body '$.car.model'}}",
+        "transformers": ["response-template"]
+    }
+}

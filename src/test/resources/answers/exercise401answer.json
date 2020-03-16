@@ -1,0 +1,11 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/echo-port"
+    },
+    "response": {
+        "status": 200,
+        "body": "Listening on port {{request.requestLine.port}}",
+        "transformers": ["response-template"]
+    }
+}
