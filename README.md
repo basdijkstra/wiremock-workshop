@@ -2,9 +2,27 @@ WireMock workshop
 ==================
 For those of you looking to gain some experience working with [WireMock](http://wiremock.org/), here are all the materials from a workshop I've created and delivered multiple times to good reviews. Feel free to use, share and adapt these materials as you see fit.
 
+What topics are covered?
+---
+This workshop covers the following topics:
+* An introduction to service virtualization
+* Getting started with WireMock
+* Request matching strategies and fault simulation 
+* Creating stateful mocks
+* Response templating
+* Extending WireMock
+
+How does it work?
+---
+You can go through all of the materials in your own time, at your own pace. The slides explain the concepts, and you can use the exercises to practice those concepts yourself.
+
+All exercises come with REST Assured-based tests that verify the implementation of your mocks. The answers to the exercises are supplied as a reference.
+
+I've taken care of all the setup, so there shouldn't be a need to configure anything. 
+
 What do I need?
 ---
-A Java 8 JDK and Maven. That's it.
+A Java JDK (version 14 is recommended) and Maven. That's it.
 
 Slides
 ---
