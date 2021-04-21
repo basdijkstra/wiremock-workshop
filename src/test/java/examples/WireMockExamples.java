@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock.examples;
+package examples;
 
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
@@ -93,7 +93,7 @@ public class WireMockExamples {
 
         stubFor(any(urlEqualTo("/template-http-method"))
             .willReturn(aResponse()
-                .withBody("{{request.requestLine.method}}")
+                .withBody("You used an HTTP {{request.method}}")
                 .withTransformers("response-template")
             ));
     }
