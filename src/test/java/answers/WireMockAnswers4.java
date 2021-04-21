@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock.answers;
+package answers;
 
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -19,7 +19,7 @@ public class WireMockAnswers4 {
     public WireMockRule wireMockRule =
         new WireMockRule(wireMockConfig().
             port(9876).
-            extensions(new ResponseTemplateTransformer(false))
+            extensions(new ResponseTemplateTransformer(true))
         );
 
     @Before
@@ -47,8 +47,7 @@ public class WireMockAnswers4 {
         stubFor(get(urlEqualTo("/echo-port"))
             .willReturn(aResponse()
                 .withStatus(200)
-                .withBody("Listening on port {{request.requestLine.port}}")
-                .withTransformers("response-template")
+                .withBody("Listening on port {{request.port}}")
             ));
     }
 
@@ -67,7 +66,6 @@ public class WireMockAnswers4 {
             .willReturn(aResponse()
                 .withStatus(200)
                 .withBody("{{jsonPath request.body '$.car.model'}}")
-                .withTransformers("response-template")
             ));
     }
 
@@ -78,7 +76,7 @@ public class WireMockAnswers4 {
          * Use this test to test your implementation of exercise 401
          */
 
-        setupStubExercise401(); // Only needed for the Java implementation
+        setupStubExercise401();
 
         given().
             spec(requestSpec).
@@ -98,7 +96,7 @@ public class WireMockAnswers4 {
          * Use this test to test your implementation of exercise 402
          */
 
-        setupStubExercise402(); // Only needed for the Java implementation
+        setupStubExercise402();
 
         given().
             spec(requestSpec).

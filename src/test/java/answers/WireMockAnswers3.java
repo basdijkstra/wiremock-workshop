@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock.answers;
+package answers;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
@@ -72,7 +72,7 @@ public class WireMockAnswers3 {
          * Use this test to test the Java implementation of exercise 301
          */
 
-        setupStubExercise301(); // Only needed for the Java implementation
+        setupStubExercise301();
 
         given().
             spec(requestSpec).

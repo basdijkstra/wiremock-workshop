@@ -1,6 +1,5 @@
-package com.ontestautomation.workshops.wiremock.exercises;
+package exercises;
 
-import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -9,7 +8,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
 public class WireMockExercises2 {
@@ -66,7 +64,7 @@ public class WireMockExercises2 {
          * Use this test to test your implementation of exercise 201
          */
 
-        setupStubExercise201(); // Only for testing your Java implementation
+        setupStubExercise201();
 
         given().
             spec(requestSpec).
@@ -86,7 +84,7 @@ public class WireMockExercises2 {
          * Use this test to test your implementation of exercise 202
          */
 
-        setupStubExercise202(); // Only for testing your Java implementation
+        setupStubExercise202();
 
         given().
             spec(requestSpec).
@@ -108,7 +106,7 @@ public class WireMockExercises2 {
          * Use this test to test your implementation of exercise 203
          */
 
-        setupStubExercise203(); // Only for testing your Java implementation
+        setupStubExercise203();
 
         given().
             spec(requestSpec).

@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock.exercises;
+package exercises;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.builder.RequestSpecBuilder;
@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
 public class WireMockExercises1 {
@@ -33,6 +32,7 @@ public class WireMockExercises1 {
 		 * Create a stub that will respond to a POST
 		 * to /pl/80-862 with an HTTP status code 200
 		 ************************************************/
+
 
 	}
 	
@@ -62,7 +62,7 @@ public class WireMockExercises1 {
 		 * Use this test to test your implementation of exercise 101
 		 */
 
-		setupStubExercise101(); // Only for testing your Java implementation
+		setupStubExercise101();
 
 		given().
 			spec(requestSpec).
@@ -76,7 +76,7 @@ public class WireMockExercises1 {
 	@Test
 	public void testExercise102() {
 
-		setupStubExercise102(); // Only for testing your Java implementation
+		setupStubExercise102();
 
 		given().
 			spec(requestSpec).
@@ -90,7 +90,7 @@ public class WireMockExercises1 {
 	@Test
 	public void testExercise103() {
 
-		setupStubExercise103(); // Only for testing your Java implementation
+		setupStubExercise103();
 
 		given().
 			spec(requestSpec).

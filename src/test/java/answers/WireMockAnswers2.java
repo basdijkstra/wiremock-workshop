@@ -1,9 +1,8 @@
-package com.ontestautomation.workshops.wiremock.answers;
+package answers;
 
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.Before;
@@ -82,7 +81,7 @@ public class WireMockAnswers2 {
          * Use this test to test your implementation of exercise 201
          */
 
-        setupStubExercise201(); // Only for testing your Java implementation
+        setupStubExercise201();
 
         given().
             spec(requestSpec).
@@ -102,7 +101,7 @@ public class WireMockAnswers2 {
          * Use this test to test your implementation of exercise 202
          */
 
-        setupStubExercise202(); // Only for testing your Java implementation
+        setupStubExercise202();
 
         given().
             spec(requestSpec).
@@ -124,7 +123,7 @@ public class WireMockAnswers2 {
          * Use this test to test your implementation of exercise 203
          */
 
-        setupStubExercise203(); // Only for testing your Java implementation
+        setupStubExercise203();
 
         given().
             spec(requestSpec).

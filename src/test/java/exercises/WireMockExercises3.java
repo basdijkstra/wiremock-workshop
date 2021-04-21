@@ -1,12 +1,10 @@
-package com.ontestautomation.workshops.wiremock.exercises;
+package exercises;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.*;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
 public class WireMockExercises3 {
@@ -46,7 +44,7 @@ public class WireMockExercises3 {
          * Use this test to test the Java implementation of exercise 301
          */
 
-        setupStubExercise301(); // Only needed for the Java implementation
+        setupStubExercise301();
 
         given().
             spec(requestSpec).

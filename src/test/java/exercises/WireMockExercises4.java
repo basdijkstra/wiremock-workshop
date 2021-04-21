@@ -1,4 +1,4 @@
-package com.ontestautomation.workshops.wiremock.exercises;
+package exercises;
 
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -7,7 +7,6 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.*;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
@@ -19,7 +18,7 @@ public class WireMockExercises4 {
     public WireMockRule wireMockRule =
         new WireMockRule(wireMockConfig().
             port(9876).
-            extensions(new ResponseTemplateTransformer(false))
+            extensions(new ResponseTemplateTransformer(true))
         );
 
     @Before
@@ -68,7 +67,7 @@ public class WireMockExercises4 {
          * Use this test to test your implementation of exercise 401
          */
 
-        setupStubExercise401(); // Only needed for the Java implementation
+        setupStubExercise401();
 
         given().
             spec(requestSpec).
@@ -88,7 +87,7 @@ public class WireMockExercises4 {
          * Use this test to test your implementation of exercise 402
          */
 
-        setupStubExercise402(); // Only needed for the Java implementation
+        setupStubExercise402();
 
         given().
             spec(requestSpec).
