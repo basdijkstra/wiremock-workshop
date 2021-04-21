@@ -3,8 +3,6 @@ package exercises.extensions;
 import com.github.tomakehurst.wiremock.extension.requestfilter.RequestFilterAction;
 import com.github.tomakehurst.wiremock.extension.requestfilter.StubRequestFilter;
 import com.github.tomakehurst.wiremock.http.Request;
-import com.github.tomakehurst.wiremock.http.RequestMethod;
-import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 
 public class HttpDeleteFilter extends StubRequestFilter {
 
