@@ -51,7 +51,7 @@ public class WireMockAnswers5dot3 {
 
         /***
          * Use this test to test your implementation of the post-serve action
-         * This should result in the
+         * This should result in the current date and time being logged to the console
          */
 
         setupStubExercise5dot3();

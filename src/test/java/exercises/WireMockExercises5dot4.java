@@ -1,7 +1,6 @@
 package exercises;
 
-import exercises.extensions.LogCurrentTimeAction;
-import com.github.tomakehurst.wiremock.extension.Parameters;
+import exercises.extensions.AddUuidAndHttpMethodHeaderTransformer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -13,7 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockExercises5dot3 {
+public class WireMockExercises5dot4 {
 
     private RequestSpecification requestSpec;
 
@@ -21,7 +20,7 @@ public class WireMockExercises5dot3 {
     public WireMockRule wireMockRule =
         new WireMockRule(wireMockConfig().
             port(9876).
-            extensions(new LogCurrentTimeAction())
+            extensions(new AddUuidAndHttpMethodHeaderTransformer())
         );
 
     @Before
@@ -33,31 +32,33 @@ public class WireMockExercises5dot3 {
             build();
     }
 
-    public void setupStubExercise5dot3() {
+    public void setupStubExercise5dot4() {
 
-        stubFor(get(urlEqualTo("/post-serve"))
-            .withPostServeAction("log-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
+        stubFor(get(urlEqualTo("/response-definition-transformer"))
             .willReturn(aResponse()
+                .withTransformerParameter("headerName", "uuid")
                 .withStatus(200)
             ));
     }
 
     @Test
-    public void aRequestSuccessfullyServedShouldWriteCurrentTimeToConsole() {
+    public void getResponse_checkHeaders_shouldIncludeThoseAddedbyResponseDefinitionTransformer() {
 
         /***
-         * Use this test to test your implementation of the post-serve action
-         * This should result in the current date and time being logged to the console
+         * Use this test to test your implementation of the response definition transformer
          */
 
-        setupStubExercise5dot3();
+        setupStubExercise5dot4();
 
         given().
             spec(requestSpec).
         when().
-            get("/post-serve").
+            get("/response-definition-transformer").
         then().
             assertThat().
-            statusCode(200);
+            statusCode(200).
+        and().
+            header("uuid", org.hamcrest.Matchers.matchesPattern("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")).
+            header("methodName", org.hamcrest.Matchers.equalTo("GET"));
     }
 }
