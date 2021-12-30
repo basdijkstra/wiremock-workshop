@@ -1,26 +1,30 @@
 package examples.usingextensions;
 
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import examples.extensions.BasicAuthRequestFilter;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class RequestFiltering {
+public class RequestFilteringTest {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(
-            new WireMockConfiguration().port(9876).extensions(new BasicAuthRequestFilter())
-    );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new BasicAuthRequestFilter())
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -31,7 +35,7 @@ public class RequestFiltering {
 
     public void stubForRequestFiltering() {
 
-        stubFor(get(urlEqualTo("/request-filtering"))
+        wiremock.stubFor(get(urlEqualTo("/request-filtering"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody("Authorized")
@@ -71,5 +75,4 @@ public class RequestFiltering {
                 assertThat().
                 statusCode(401);
     }
-
 }

@@ -1,20 +1,21 @@
-package exercises;
+package answers;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
-public class WireMockExercises3 {
+@WireMockTest(httpPort = 9876)
+public class WireMockAnswers3Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(9876);
-
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -35,6 +36,32 @@ public class WireMockExercises3 {
          *      returns HTTP 200 and body "DATA FOR /nl/3825"
          ************************************************/
 
+        stubFor(get(urlEqualTo("/nl/3825"))
+            .inScenario("Stateful mock exercise")
+            .whenScenarioStateIs(Scenario.STARTED)
+            .willReturn(aResponse()
+                .withStatus(404)
+            )
+        );
+
+        stubFor(post(urlEqualTo("/nl/3825"))
+            .inScenario("Stateful mock exercise")
+            .whenScenarioStateIs(Scenario.STARTED)
+            .withRequestBody(equalTo("DATA FOR /nl/3825"))
+            .willReturn(aResponse()
+                .withStatus(201)
+            )
+            .willSetStateTo("DATA_CREATED")
+        );
+
+        stubFor(get(urlEqualTo("/nl/3825"))
+            .inScenario("Stateful mock exercise")
+            .whenScenarioStateIs("DATA_CREATED")
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody("DATA FOR /nl/3825")
+            )
+        );
     }
 
     @Test

@@ -1,28 +1,30 @@
 package answers;
 
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers4 {
+public class WireMockAnswers4Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule =
-        new WireMockRule(wireMockConfig().
-            port(9876).
-            extensions(new ResponseTemplateTransformer(true))
-        );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new ResponseTemplateTransformer(true))
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -44,7 +46,7 @@ public class WireMockAnswers4 {
          * Don't forget to enable response templating!
          ************************************************/
 
-        stubFor(get(urlEqualTo("/echo-port"))
+        wiremock.stubFor(get(urlEqualTo("/echo-port"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withBody("Listening on port {{request.port}}")
@@ -62,7 +64,7 @@ public class WireMockAnswers4 {
          * from the request body
          ************************************************/
 
-        stubFor(post(urlEqualTo("/echo-car-model"))
+        wiremock.stubFor(post(urlEqualTo("/echo-car-model"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withBody("{{jsonPath request.body '$.car.model'}}")

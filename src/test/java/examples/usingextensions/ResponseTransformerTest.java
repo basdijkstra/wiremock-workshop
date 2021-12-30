@@ -1,30 +1,32 @@
 package examples.usingextensions;
 
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import examples.extensions.AddDateHeaderTransformer;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class ResponseTransformer {
+public class ResponseTransformerTest {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(
-            new WireMockConfiguration().port(9876).extensions(new AddDateHeaderTransformer())
-    );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new AddDateHeaderTransformer())
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -35,7 +37,7 @@ public class ResponseTransformer {
 
     public void stubForResponseTransformer() {
 
-        stubFor(get(urlEqualTo("/response-transformer"))
+        wiremock.stubFor(get(urlEqualTo("/response-transformer"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("existingHeader", "shouldBeVisible")

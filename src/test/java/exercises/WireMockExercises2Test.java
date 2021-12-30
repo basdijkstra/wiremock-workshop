@@ -1,25 +1,21 @@
-package answers;
+package exercises;
 
-import com.github.tomakehurst.wiremock.http.Fault;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.client.ClientProtocolException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers2 {
+@WireMockTest(httpPort = 9876)
+public class WireMockExercises2Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(9876);
-
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -37,11 +33,6 @@ public class WireMockAnswers2 {
          * equal to 'Service unavailable'
          ************************************************/
 
-        stubFor(get(urlEqualTo("/servicedown"))
-            .willReturn(aResponse()
-                .withStatus(503)
-                .withStatusMessage("Service unavailable")
-            ));
     }
 
     public void setupStubExercise202() {
@@ -53,12 +44,6 @@ public class WireMockAnswers2 {
          * fixed delay of 3000 milliseconds.
          ************************************************/
 
-        stubFor(get(urlEqualTo("/slow"))
-            .withHeader("speed", equalTo("slow"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withFixedDelay(3000)
-            ));
     }
 
     public void setupStubExercise203() {
@@ -68,10 +53,6 @@ public class WireMockAnswers2 {
          * to /fault with a Fault of type RANDOM_DATA_THEN_CLOSE
          ************************************************/
 
-        stubFor(get(urlEqualTo("/fault"))
-                .willReturn(aResponse()
-                        .withFault(Fault.RANDOM_DATA_THEN_CLOSE)
-                ));
     }
 
     @Test
@@ -116,7 +97,7 @@ public class WireMockAnswers2 {
             time(org.hamcrest.Matchers.greaterThan(3000L));
     }
 
-    @Test(expected = ClientProtocolException.class)
+    @Test
     public void testExercise203() {
 
         /***
@@ -125,9 +106,12 @@ public class WireMockAnswers2 {
 
         setupStubExercise203();
 
-        given().
-            spec(requestSpec).
-        when().
-            get("/fault");
+        Assertions.assertThrows(ClientProtocolException.class, () -> {
+
+            given().
+                spec(requestSpec).
+            when().
+                get("/fault");
+        });
     }
 }

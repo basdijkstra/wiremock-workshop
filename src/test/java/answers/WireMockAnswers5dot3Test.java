@@ -1,34 +1,30 @@
 package answers;
 
 import answers.extensions.LogCurrentTimeAction;
-import answers.extensions.MultipleHttpVerbsMatcher;
 import com.github.tomakehurst.wiremock.extension.Parameters;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot3 {
+public class WireMockAnswers5dot3Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule =
-        new WireMockRule(wireMockConfig().
-            port(9876).
-            extensions(new LogCurrentTimeAction())
-        );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new LogCurrentTimeAction())
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -39,7 +35,7 @@ public class WireMockAnswers5dot3 {
 
     public void setupStubExercise5dot3() {
 
-        stubFor(get(urlEqualTo("/post-serve"))
+        wiremock.stubFor(get(urlEqualTo("/post-serve"))
             .withPostServeAction("log-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
             .willReturn(aResponse()
                 .withStatus(200)

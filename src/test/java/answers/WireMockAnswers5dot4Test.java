@@ -1,29 +1,29 @@
-package exercises;
+package answers;
 
-import exercises.extensions.AddUuidAndHttpMethodHeaderTransformer;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import answers.extensions.AddUuidAndHttpMethodHeaderTransformer;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockExercises5dot4 {
+public class WireMockAnswers5dot4Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule =
-        new WireMockRule(wireMockConfig().
-            port(9876).
-            extensions(new AddUuidAndHttpMethodHeaderTransformer())
-        );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new AddUuidAndHttpMethodHeaderTransformer())
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -34,7 +34,7 @@ public class WireMockExercises5dot4 {
 
     public void setupStubExercise5dot4() {
 
-        stubFor(get(urlEqualTo("/response-definition-transformer"))
+        wiremock.stubFor(get(urlEqualTo("/response-definition-transformer"))
             .willReturn(aResponse()
                 .withTransformerParameter("headerName", "uuid")
                 .withStatus(200)

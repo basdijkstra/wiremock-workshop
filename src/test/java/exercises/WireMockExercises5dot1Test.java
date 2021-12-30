@@ -1,31 +1,29 @@
-package answers;
+package exercises;
 
-import answers.extensions.HttpDeleteFilter;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import exercises.extensions.HttpDeleteFilter;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot1 {
+public class WireMockExercises5dot1Test {
 
     private RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule =
-        new WireMockRule(wireMockConfig().
-            port(9876).
-            extensions(new HttpDeleteFilter())
-        );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new HttpDeleteFilter())
+            ).build();
 
-    @Before
+    @BeforeEach
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
@@ -36,7 +34,7 @@ public class WireMockAnswers5dot1 {
 
     public void setupStubExercise5dot1() {
 
-        stubFor(any(urlEqualTo("/http-delete-filter"))
+        wiremock.stubFor(any(urlEqualTo("/http-delete-filter"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withBody("Your request has been processed!")

@@ -7,23 +7,23 @@
 	<name>WireMock Workshop</name>
 	<description>Project containing examples, exercises and answers for my open source WireMock workshop</description>
 	<properties>
-		<maven.compiler.source>14</maven.compiler.source>
-		<maven.compiler.target>14</maven.compiler.target>
-		<wiremock.version>2.27.2</wiremock.version>
-		<junit.version>4.13.2</junit.version>
-		<restassured.version>4.3.3</restassured.version>
-		<slf4j.version>1.7.30</slf4j.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<wiremock.version>2.32.0</wiremock.version>
+		<junit.version>5.8.2</junit.version>
+		<restassured.version>4.4.0</restassured.version>
+		<slf4j.version>1.7.32</slf4j.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.tomakehurst</groupId>
-			<artifactId>wiremock</artifactId>
+			<artifactId>wiremock-jre8</artifactId>
 			<version>${wiremock.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>

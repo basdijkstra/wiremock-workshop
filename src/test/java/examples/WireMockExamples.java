@@ -1,10 +1,12 @@
 package examples;
 
 import com.github.tomakehurst.wiremock.http.Fault;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
+@WireMockTest(httpPort = 9876)
 public class WireMockExamples {
 
     public void helloWorld() {

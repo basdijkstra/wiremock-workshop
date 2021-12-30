@@ -1,32 +1,31 @@
-package answers;
+package exercises;
 
-import answers.extensions.AddUuidAndHttpMethodHeaderTransformer;
-import answers.extensions.LogCurrentTimeAction;
-import com.github.tomakehurst.wiremock.extension.Parameters;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import exercises.extensions.AddUuidAndHttpMethodHeaderTransformer;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot4 {
+public class WireMockExercises5dot4Test {
 
-    private RequestSpecification requestSpec;
+    private static RequestSpecification requestSpec;
 
-    @Rule
-    public WireMockRule wireMockRule =
-        new WireMockRule(wireMockConfig().
-            port(9876).
-            extensions(new AddUuidAndHttpMethodHeaderTransformer())
-        );
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new AddUuidAndHttpMethodHeaderTransformer())
+            ).build();
 
-    @Before
-    public void createRequestSpec() {
+    @BeforeAll
+    public static void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
             setBaseUri("http://localhost").
@@ -36,7 +35,7 @@ public class WireMockAnswers5dot4 {
 
     public void setupStubExercise5dot4() {
 
-        stubFor(get(urlEqualTo("/response-definition-transformer"))
+        wiremock.stubFor(get(urlEqualTo("/response-definition-transformer"))
             .willReturn(aResponse()
                 .withTransformerParameter("headerName", "uuid")
                 .withStatus(200)
