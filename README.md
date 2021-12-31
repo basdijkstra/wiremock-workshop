@@ -22,7 +22,7 @@ I've taken care of all the setup, so there shouldn't be a need to configure anyt
 
 What do I need?
 ---
-A Java JDK (version 14 is recommended) and Maven. That's it.
+A Java JDK (version 17 is recommended) and Maven. That's it.
 
 Slides
 ---
