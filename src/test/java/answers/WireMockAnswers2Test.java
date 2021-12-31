@@ -72,6 +72,25 @@ public class WireMockAnswers2Test {
                 ));
     }
 
+    public void setupStubExercise204() {
+
+        /************************************************
+         * Create a stub that will respond to a GET request
+         * to /check-for-pizza with status code 200,
+         * but only if:
+         * - the 'pizza' header has value 'no-pineapple'
+         * - the 'pizza' header is not present
+         ************************************************/
+
+        stubFor(get(urlEqualTo("/check-for-pizza"))
+                .withHeader("pizza",
+                        equalTo("no-pineapple").or(absent())
+                )
+                .willReturn(aResponse()
+                        .withStatus(200))
+        );
+    }
+
     @Test
     public void testExercise201() {
 
@@ -130,5 +149,43 @@ public class WireMockAnswers2Test {
             when().
                 get("/fault");
         });
+    }
+
+    @Test
+    public void testExercise204() {
+
+        /***
+         * Use this test to test your implementation of exercise 204
+         */
+
+        setupStubExercise204();
+
+        given().
+            spec(requestSpec).
+        and().
+            header("pizza", "no-pineapple").
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(200);
+
+        given().
+            spec(requestSpec).
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(200);
+
+        given().
+            spec(requestSpec).
+        and().
+            header("pizza", "pineapple").
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(404);
     }
 }

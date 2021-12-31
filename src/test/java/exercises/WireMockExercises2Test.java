@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static io.restassured.RestAssured.given;
 
 @WireMockTest(httpPort = 9876)
@@ -51,6 +53,18 @@ public class WireMockExercises2Test {
         /************************************************
          * Create a stub that will respond to a GET request
          * to /fault with a Fault of type RANDOM_DATA_THEN_CLOSE
+         ************************************************/
+
+    }
+
+    public void setupStubExercise204() {
+
+        /************************************************
+         * Create a stub that will respond to a GET request
+         * to /check-for-pizza with status code 200,
+         * but only if:
+         * - the 'pizza' header has value 'no-pineapple'
+         * - the 'pizza' header is not present
          ************************************************/
 
     }
@@ -113,5 +127,43 @@ public class WireMockExercises2Test {
             when().
                 get("/fault");
         });
+    }
+
+    @Test
+    public void testExercise204() {
+
+        /***
+         * Use this test to test your implementation of exercise 204
+         */
+
+        setupStubExercise204();
+
+        given().
+            spec(requestSpec).
+        and().
+            header("pizza", "no-pineapple").
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(200);
+
+        given().
+            spec(requestSpec).
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(200);
+
+        given().
+            spec(requestSpec).
+        and().
+            header("pizza", "pineapple").
+        when().
+            get("/check-for-pizza").
+        then().
+            assertThat().
+            statusCode(404);
     }
 }

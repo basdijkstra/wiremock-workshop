@@ -40,6 +40,40 @@ public class WireMockExamples {
             ));
     }
 
+    public void setupStubLogicalAndHeaderMatching() {
+
+        stubFor(get(urlEqualTo("logical-or-matching"))
+            .withHeader("my-header",
+                matching("[a-z]+").and(containing("some-value"))
+            )
+            .willReturn(aResponse()
+                .withBody("Logical AND matching"))
+        );
+    }
+
+    public void setupStubLogicalAndHeaderMatchingMoreVerbose() {
+
+        stubFor(get(urlEqualTo("logical-or-matching"))
+            .withHeader("my-header", and(
+                matching("[a-z]+"),
+                containing("some-value"))
+            )
+            .willReturn(aResponse()
+                .withBody("Logical AND matching, a little more verbose"))
+        );
+    }
+
+    public void setupStubLogicalOrHeaderMatching() {
+
+        stubFor(get(urlEqualTo("logical-or-matching"))
+            .withHeader("Content-Type",
+                equalTo("application/json").or(absent())
+            )
+            .willReturn(aResponse()
+                .withBody("Logical OR matching"))
+        );
+    }
+
     public void setupStubReturningErrorCode() {
 
         stubFor(get(urlEqualTo("/errorcode"))
