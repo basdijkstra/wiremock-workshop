@@ -13,6 +13,7 @@
 		<junit.version>5.8.2</junit.version>
 		<restassured.version>4.4.0</restassured.version>
 		<slf4j.version>1.7.32</slf4j.version>
+		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,4 +41,13 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.plugin.version}</version>
+			</plugin>
+		</plugins>
+	</build>
 </project>
