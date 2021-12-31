@@ -45,7 +45,7 @@ public class WireMockExamples {
 
         stubFor(get(urlEqualTo("logical-or-matching"))
             .withHeader("my-header",
-                matching("[a-z]+").and(containing("some-value"))
+                matching("[a-z]+").and(containing("somevalue"))
             )
             .willReturn(aResponse()
                 .withBody("Logical AND matching"))
@@ -57,7 +57,7 @@ public class WireMockExamples {
         stubFor(get(urlEqualTo("logical-or-matching"))
             .withHeader("my-header", and(
                 matching("[a-z]+"),
-                containing("some-value"))
+                containing("somevalue"))
             )
             .willReturn(aResponse()
                 .withBody("Logical AND matching, a little more verbose"))
