@@ -1,5 +1,6 @@
 package examples;
 
+import com.github.tomakehurst.wiremock.common.DateTimeUnit;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
@@ -71,6 +72,28 @@ public class WireMockExamples {
             )
             .willReturn(aResponse()
                 .withBody("Logical OR matching"))
+        );
+    }
+
+    public void setupStubAfterSpecificDateMatching() {
+
+        stubFor(get(urlEqualTo("date-is-after"))
+            .withHeader("my-date",
+                after("2021-07-01T00:00:00Z")
+            )
+            .willReturn(aResponse()
+                .withBody("Date is after midnight, July 1, 2021"))
+        );
+    }
+
+    public void setupStubRelativeToCurrentDateMatching() {
+
+        stubFor(get(urlEqualTo("date-is-relative-to-now"))
+            .withHeader("my-date",
+                beforeNow().expectedOffset(1, DateTimeUnit.MONTHS)
+            )
+            .willReturn(aResponse()
+                .withBody("Date is at least 1 month before current date"))
         );
     }
 
