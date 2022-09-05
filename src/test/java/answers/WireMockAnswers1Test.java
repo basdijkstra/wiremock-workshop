@@ -28,39 +28,40 @@ public class WireMockAnswers1Test {
 
 		/************************************************
 		 * Create a stub that will respond to a POST
-		 * to /pl/80-862 with an HTTP status code 200
+		 * to /requestLoan with an HTTP status code 200
 		 ************************************************/
 
-		stubFor(post(urlEqualTo("/pl/80-862"))
+		stubFor(post(urlEqualTo("/requestLoan"))
 				.willReturn(aResponse()
 						.withStatus(200)
 				));
 	}
-	
+
 	public void setupStubExercise102() {
 
 		/************************************************
 		 * Create a stub that will respond to a POST
-		 * to /pl/80-863 with a response that contains
-		 * a Content-Type header with value text/plain
+		 * to /requestLoan with a response that contains
+		 * a Content-Type header with value application/json
 		 ************************************************/
-		
-		stubFor(post(urlEqualTo("/pl/80-863"))
+
+		stubFor(post(urlEqualTo("/requestLoan"))
 				.willReturn(aResponse()
-						.withHeader("Content-Type", "text/plain")
+						.withHeader("Content-Type", "application/json")
 				));
 	}
-	
+
 	public void setupStubExercise103() {
 
 		/************************************************
 		 * Create a stub that will respond to a POST
-		 * to /pl/80-864 with a response body 'Posted!'
+		 * to /requestLoan with a plain text response body
+		 * equal to 'Loan application received!'
 		 ************************************************/
 
-		stubFor(post(urlEqualTo("/pl/80-864"))
+		stubFor(post(urlEqualTo("/requestLoan"))
 				.willReturn(aResponse()
-						.withBody("Posted!")
+						.withBody("Loan application received!")
 				));
 	}
 
@@ -74,12 +75,12 @@ public class WireMockAnswers1Test {
 		setupStubExercise101();
 
 		given().
-			spec(requestSpec).
+				spec(requestSpec).
 		when().
-			post("/pl/80-862").
+				post("/requestLoan").
 		then().
-			assertThat().
-			statusCode(200);
+				assertThat().
+				statusCode(200);
 	}
 
 	@Test
@@ -88,12 +89,12 @@ public class WireMockAnswers1Test {
 		setupStubExercise102();
 
 		given().
-			spec(requestSpec).
+				spec(requestSpec).
 		when().
-			post("/pl/80-863").
+				post("/requestLoan").
 		then().
-			assertThat().
-			contentType(ContentType.TEXT);
+				assertThat().
+				contentType(ContentType.JSON);
 	}
 
 	@Test
@@ -102,11 +103,11 @@ public class WireMockAnswers1Test {
 		setupStubExercise103();
 
 		given().
-			spec(requestSpec).
+				spec(requestSpec).
 		when().
-			post("/pl/80-864").
+				post("/requestLoan").
 		then().
-			assertThat().
-			body(org.hamcrest.Matchers.equalTo("Posted!"));
+				assertThat().
+				body(org.hamcrest.Matchers.equalTo("Loan application received!"));
 	}
 }
