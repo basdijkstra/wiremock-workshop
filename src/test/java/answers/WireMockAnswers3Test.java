@@ -19,48 +19,48 @@ public class WireMockAnswers3Test {
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
-            setBaseUri("http://localhost").
-            setPort(9876).
-            build();
+                setBaseUri("http://localhost").
+                setPort(9876).
+                build();
     }
 
     public void setupStubExercise301() {
 
         /************************************************
          * Create a stub that exerts the following behavior:
-         * - The scenario is called 'Stateful mock exercise'
-         * - 1. A first GET to /nl/3825 returns HTTP 404
-         * - 2. A POST to /nl/3825 with body 'DATA FOR /nl/3825' returns HTTP 201
-         * 		and causes a transition to state 'DATA_CREATED'
-         * - 3. A second GET (when in state 'DATA_CREATED ') to /nl/3825
-         *      returns HTTP 200 and body "DATA FOR /nl/3825"
+         * - The scenario is called 'Loan processing'
+         * - 1. A first GET to /loan/12345 returns HTTP 404
+         * - 2. A POST to /requestLoan with body 'Loan ID: 12345' returns HTTP 201
+         * 		and causes a transition to state 'LOAN_GRANTED'
+         * - 3. A second GET (when in state 'LOAN_GRANTED') to /loan/12345
+         *      returns HTTP 200 and body 'Loan ID: 12345'
          ************************************************/
 
-        stubFor(get(urlEqualTo("/nl/3825"))
-            .inScenario("Stateful mock exercise")
-            .whenScenarioStateIs(Scenario.STARTED)
-            .willReturn(aResponse()
-                .withStatus(404)
-            )
+        stubFor(get(urlEqualTo("/loan/12345"))
+                .inScenario("Loan processing")
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willReturn(aResponse()
+                        .withStatus(404)
+                )
         );
 
-        stubFor(post(urlEqualTo("/nl/3825"))
-            .inScenario("Stateful mock exercise")
-            .whenScenarioStateIs(Scenario.STARTED)
-            .withRequestBody(equalTo("DATA FOR /nl/3825"))
-            .willReturn(aResponse()
-                .withStatus(201)
-            )
-            .willSetStateTo("DATA_CREATED")
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .inScenario("Loan application")
+                .whenScenarioStateIs(Scenario.STARTED)
+                .withRequestBody(equalTo("Loan ID: 12345"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                )
+                .willSetStateTo("LOAN_GRANTED")
         );
 
-        stubFor(get(urlEqualTo("/nl/3825"))
-            .inScenario("Stateful mock exercise")
-            .whenScenarioStateIs("DATA_CREATED")
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withBody("DATA FOR /nl/3825")
-            )
+        stubFor(get(urlEqualTo("/loan/12345"))
+                .inScenario("Loan application")
+                .whenScenarioStateIs("LOAN_GRANTED")
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withBody("Loan ID: 12345")
+                )
         );
     }
 
@@ -74,31 +74,31 @@ public class WireMockAnswers3Test {
         setupStubExercise301();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/nl/3825").
+                get("/loan/12345").
         then().
-            assertThat().
-            statusCode(404);
+                assertThat().
+                statusCode(404);
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         and().
-            body("DATA FOR /nl/3825").
+                body("Loan ID: 12345").
         when().
-            post("/nl/3825").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(201);
+                assertThat().
+                statusCode(201);
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/nl/3825").
+                get("/loan/12345").
         then().
-            assertThat().
-            statusCode(200).
+                assertThat().
+                statusCode(200).
         and().
-            body(org.hamcrest.Matchers.equalTo("DATA FOR /nl/3825"));
+                body(org.hamcrest.Matchers.equalTo("Loan ID: 12345"));
     }
 }
