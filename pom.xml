@@ -4,14 +4,13 @@
 	<groupId>com.ontestautomation.workshops.wiremock</groupId>
 	<artifactId>wiremock-workshop</artifactId>
 	<version>1.0.0</version>
-	<name>WireMock Workshop</name>
 	<description>Project containing examples, exercises and answers for my open source WireMock workshop</description>
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<wiremock.version>2.32.0</wiremock.version>
-		<junit.version>5.8.2</junit.version>
-		<restassured.version>4.4.0</restassured.version>
+		<wiremock.version>2.33.2</wiremock.version>
+		<junit.version>5.9.0</junit.version>
+		<restassured.version>5.1.1</restassured.version>
 		<slf4j.version>1.7.32</slf4j.version>
 		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
 	</properties>
