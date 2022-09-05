@@ -4,6 +4,8 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import models.LoanDetails;
+import models.LoanRequest;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,52 +23,62 @@ public class WireMockAnswers2Test {
     public void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
-            setBaseUri("http://localhost").
-            setPort(9876).
-            build();
+                setBaseUri("http://localhost").
+                setPort(9876).
+                build();
     }
 
     public void setupStubExercise201() {
 
         /************************************************
-         * Create a stub that will respond to all GET
-         * requests to /servicedown
+         * Create a stub that will respond to all POST
+         * requests to /requestLoan
          * with HTTP status code 503 and a status message
-         * equal to 'Service unavailable'
+         * equal to 'Loan processor service unavailable'
+         *
+         * Have a look at https://wiremock.org/docs/stubbing/
+         * under 'Setting the response status message'
+         * for an example of how to do this
          ************************************************/
 
-        stubFor(get(urlEqualTo("/servicedown"))
-            .willReturn(aResponse()
-                .withStatus(503)
-                .withStatusMessage("Service unavailable")
-            ));
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .willReturn(aResponse()
+                        .withStatus(503)
+                        .withStatusMessage("Loan processor service unavailable")
+                ));
     }
 
     public void setupStubExercise202() {
 
         /************************************************
-         * Create a stub that will respond to a GET request
-         * to /slow with request header 'speed' with value 'slow'.
+         * Create a stub that will respond to a POST request
+         * to /requestLoan, but only if this request contains
+         * a header 'speed' with value 'slow'.
+         *
          * Respond with status code 200, but only after a
          * fixed delay of 3000 milliseconds.
          ************************************************/
 
-        stubFor(get(urlEqualTo("/slow"))
-            .withHeader("speed", equalTo("slow"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withFixedDelay(3000)
-            ));
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .withHeader("speed", equalTo("slow"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withFixedDelay(3000)
+                ));
     }
 
     public void setupStubExercise203() {
 
         /************************************************
-         * Create a stub that will respond to a GET request
-         * to /fault with a Fault of type RANDOM_DATA_THEN_CLOSE
+         * Create a stub that will respond to a POST request
+         * to /requestLoan, but only if this request contains
+         * a cookie 'session' with value 'invalid'
+         *
+         * Respond with a Fault of type RANDOM_DATA_THEN_CLOSE
          ************************************************/
 
-        stubFor(get(urlEqualTo("/fault"))
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .withCookie("session", equalTo("invalid"))
                 .willReturn(aResponse()
                         .withFault(Fault.RANDOM_DATA_THEN_CLOSE)
                 ));
@@ -75,16 +87,37 @@ public class WireMockAnswers2Test {
     public void setupStubExercise204() {
 
         /************************************************
-         * Create a stub that will respond to a GET request
-         * to /check-for-pizza with status code 200,
+         * Create a stub that will respond to a POST request
+         * to /requestLoan with status code 200,
          * but only if:
-         * - the 'pizza' header has value 'no-pineapple'
-         * - the 'pizza' header is not present
+         * - the 'backgroundCheck' header has value 'OK'
+         * - the 'backgroundCheck' header is not present
          ************************************************/
 
-        stubFor(get(urlEqualTo("/check-for-pizza"))
-                .withHeader("pizza",
-                        equalTo("no-pineapple").or(absent())
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .withHeader("backgroundCheck",
+                        equalTo("OK").or(absent())
+                )
+                .willReturn(aResponse()
+                        .withStatus(200))
+        );
+    }
+
+    public void setupStubExercise205() {
+
+        /************************************************
+         * Create a stub that will respond to a POST request
+         * to /requestLoan with status code 200,
+         * but only if the loan amount specified in the
+         * request body is equal to 1000.
+         *
+         * The loan amount is specified in the 'amount'
+         * field, which is a child element of 'loanDetails'
+         ************************************************/
+
+        stubFor(post(urlEqualTo("/requestLoan"))
+                .withRequestBody(
+                        matchingJsonPath("$.loanDetails[?(@.amount == '1000')]")
                 )
                 .willReturn(aResponse()
                         .withStatus(200))
@@ -101,14 +134,14 @@ public class WireMockAnswers2Test {
         setupStubExercise201();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/servicedown").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(503).
+                assertThat().
+                statusCode(503).
         and().
-            statusLine(org.hamcrest.Matchers.containsString("Service unavailable"));
+                statusLine(org.hamcrest.Matchers.containsString("Loan processor service unavailable"));
     }
 
     @Test
@@ -121,16 +154,16 @@ public class WireMockAnswers2Test {
         setupStubExercise202();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         and().
-            header("speed","slow").
+                header("speed","slow").
         when().
-            get("/slow").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(200).
+                assertThat().
+                statusCode(200).
         and().
-            time(org.hamcrest.Matchers.greaterThan(3000L));
+                time(org.hamcrest.Matchers.greaterThan(3000L));
     }
 
     @Test
@@ -145,9 +178,11 @@ public class WireMockAnswers2Test {
         Assertions.assertThrows(ClientProtocolException.class, () -> {
 
             given().
-                spec(requestSpec).
+                    spec(requestSpec).
+            and().
+                    cookie("session", "invalid").
             when().
-                get("/fault");
+                    post("/requestLoan");
         });
     }
 
@@ -161,31 +196,63 @@ public class WireMockAnswers2Test {
         setupStubExercise204();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         and().
-            header("pizza", "no-pineapple").
+                header("backgroundCheck", "OK").
         when().
-            get("/check-for-pizza").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(200);
+                assertThat().
+                statusCode(200);
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/check-for-pizza").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(200);
+                assertThat().
+                statusCode(200);
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         and().
-            header("pizza", "pineapple").
+                header("backgroundCheck", "FAILED").
         when().
-            get("/check-for-pizza").
+                post("/requestLoan").
         then().
-            assertThat().
-            statusCode(404);
+                assertThat().
+                statusCode(404);
+    }
+
+    @Test
+    public void testExercise205() {
+
+        setupStubExercise205();
+
+        LoanDetails loanDetails = new LoanDetails(1000, 100, "pending");
+        LoanRequest loanRequest = new LoanRequest(12212, loanDetails);
+
+        given().
+                spec(requestSpec).
+        and().
+                body(loanRequest).
+        when().
+                post("/requestLoan").
+        then().
+                assertThat().
+                statusCode(200);
+
+        LoanDetails moreLoanDetails = new LoanDetails(1500, 100, "pending");
+        LoanRequest anotherLoanRequest = new LoanRequest(12212, moreLoanDetails);
+
+        given().
+                spec(requestSpec).
+        and().
+                body(anotherLoanRequest).
+        when().
+                post("/requestLoan").
+        then().
+                assertThat().
+                statusCode(404);
     }
 }
