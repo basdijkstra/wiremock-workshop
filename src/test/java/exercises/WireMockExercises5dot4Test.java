@@ -1,11 +1,10 @@
 package exercises;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import exercises.extensions.AddUuidAndHttpMethodHeaderTransformer;
+import exercises.extensions.AddUuidHeaderTransformer;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -21,7 +20,7 @@ public class WireMockExercises5dot4Test {
     static WireMockExtension wiremock = WireMockExtension.newInstance().
             options(wireMockConfig().
                     port(9876).
-                    extensions(new AddUuidAndHttpMethodHeaderTransformer())
+                    extensions(new AddUuidHeaderTransformer())
             ).build();
 
     @BeforeAll
@@ -35,9 +34,9 @@ public class WireMockExercises5dot4Test {
 
     public void setupStubExercise5dot4() {
 
-        wiremock.stubFor(get(urlEqualTo("/response-definition-transformer"))
+        wiremock.stubFor(post(urlEqualTo("/requestLoan"))
             .willReturn(aResponse()
-                .withTransformerParameter("headerName", "uuid")
+                .withTransformerParameter("uuidHeaderName", "uuid")
                 .withStatus(200)
             ));
     }
@@ -59,7 +58,6 @@ public class WireMockExercises5dot4Test {
             assertThat().
             statusCode(200).
         and().
-            header("uuid", org.hamcrest.Matchers.matchesPattern("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")).
-            header("methodName", org.hamcrest.Matchers.equalTo("GET"));
+            header("uuid", org.hamcrest.Matchers.matchesPattern("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"));
     }
 }

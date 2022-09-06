@@ -9,35 +9,29 @@ import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 
 import java.util.UUID;
 
-public class AddUuidAndHttpMethodHeaderTransformer extends ResponseDefinitionTransformer {
+public class AddUuidHeaderTransformer extends ResponseDefinitionTransformer {
 
     @Override
     public ResponseDefinition transform(
             Request request, ResponseDefinition responseDefinition, FileSource files, Parameters parameters
     ) {
         /**
-         * Transform the response by creating a new ResponseDefinition that add two headers:
-         * - One header that contains an auto-generated UUID
-         *   Use UUID.randomUUID().toString() to generate it
-         *   The header name is specified as a parameter called 'headerName'
-         * - One header that contains the HTTP method used in the request
-         *   Use request.getMethod().value() to retrieve it
-         *   The header name is 'methodName'
+         * Transform the response by creating a new ResponseDefinition
+         * that adds a header that contains an auto-generated UUID
+         * - Use UUID.randomUUID().toString() to generate it
+         * - The header name to be 'injected' into the response
+         *   is specified as a parameter called 'uuidHeaderName'
          */
 
         return new ResponseDefinitionBuilder()
                 .withHeader(
-                        parameters.getString("headerName"),
+                        parameters.getString("uuidHeaderName"),
                         UUID.randomUUID().toString())
-                .withHeader(
-                        "methodName",
-                        request.getMethod().value()
-                )
                 .build();
     }
 
     @Override
     public String getName() {
-        return "add-uuid-and-method-name";
+        return "add-uuid-header";
     }
 }
