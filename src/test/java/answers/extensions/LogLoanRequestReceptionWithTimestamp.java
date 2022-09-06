@@ -8,11 +8,11 @@ import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LogCurrentTimeAction extends PostServeAction {
+public class LogLoanRequestReceptionWithTimestamp extends PostServeAction {
 
     @Override
     public String getName() {
-        return "log-timestamp";
+        return "log-loan-request-with-timestamp";
     }
 
     @Override
@@ -21,11 +21,14 @@ public class LogCurrentTimeAction extends PostServeAction {
         /**
          * Read the desired date format from the parameters (parameter name is 'format')
          * Use this to format the current date and print
-         * 'Response served on: <current_date_and_time> to the console
+         * '<timestamp>: Loan application request received'
          */
 
         String format = parameters.getString("format");
 
-        System.out.println("Response served on: " + new SimpleDateFormat(format).format(new Date()));
+        System.out.printf(
+                "%s: Loan application request received",
+                new SimpleDateFormat(format).format(new Date())
+        );
     }
 }

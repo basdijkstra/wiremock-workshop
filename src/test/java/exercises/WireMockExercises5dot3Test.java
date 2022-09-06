@@ -1,7 +1,7 @@
 package exercises;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import exercises.extensions.LogCurrentTimeAction;
+import exercises.extensions.LogLoanRequestReceptionWithTimestamp;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -21,7 +21,7 @@ public class WireMockExercises5dot3Test {
     static WireMockExtension wiremock = WireMockExtension.newInstance().
             options(wireMockConfig().
                     port(9876).
-                    extensions(new LogCurrentTimeAction())
+                    extensions(new LogLoanRequestReceptionWithTimestamp())
             ).build();
 
     @BeforeEach
@@ -35,19 +35,20 @@ public class WireMockExercises5dot3Test {
 
     public void setupStubExercise5dot3() {
 
-        wiremock.stubFor(get(urlEqualTo("/post-serve"))
-            .withPostServeAction("log-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
+        wiremock.stubFor(post(urlEqualTo("/requestLoan"))
+            .withPostServeAction("log-loan-request-with-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
             .willReturn(aResponse()
-                .withStatus(200)
+                .withStatus(201)
             ));
     }
 
     @Test
-    public void aRequestSuccessfullyServedShouldWriteCurrentTimeToConsole() {
+    public void anIncomingLoanRequestShouldTriggerAConsoleLogMessage() {
 
         /***
          * Use this test to test your implementation of the post-serve action
-         * This should result in the current date and time being logged to the console
+         * This should result in a message with the timestamp in the desired format
+         * printed to the console
          */
 
         setupStubExercise5dot3();
@@ -55,9 +56,9 @@ public class WireMockExercises5dot3Test {
         given().
             spec(requestSpec).
         when().
-            get("/post-serve").
+            post("/requestLoan").
         then().
             assertThat().
-            statusCode(200);
+            statusCode(201);
     }
 }
