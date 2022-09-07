@@ -12,7 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot4Test {
+public class WireMockAnswers6dot4Test {
 
     private RequestSpecification requestSpec;
 
@@ -32,7 +32,7 @@ public class WireMockAnswers5dot4Test {
             build();
     }
 
-    public void setupStubExercise5dot4() {
+    public void stubForResponseDefinitionTransformer() {
 
         wiremock.stubFor(post(urlEqualTo("/requestLoan"))
             .willReturn(aResponse()
@@ -48,7 +48,7 @@ public class WireMockAnswers5dot4Test {
          * Use this test to test your implementation of the response definition transformer
          */
 
-        setupStubExercise5dot4();
+        stubForResponseDefinitionTransformer();
 
         given().
             spec(requestSpec).

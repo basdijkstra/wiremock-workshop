@@ -16,7 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockExercises5dot2Test {
+public class WireMockExercises6dot2Test {
 
     private RequestSpecification requestSpec;
 
@@ -36,7 +36,7 @@ public class WireMockExercises5dot2Test {
             build();
     }
 
-    public void setupStubExercise5dot2() {
+    public void stubForCustomRequestFilter() {
 
         List<String> verbs = new ArrayList<>();
         verbs.add("PUT");
@@ -58,7 +58,7 @@ public class WireMockExercises5dot2Test {
          * This request should be rejected as it uses an HTTP PUT
          */
 
-        setupStubExercise5dot2();
+        stubForCustomRequestFilter();
 
         given().
                 spec(requestSpec).
@@ -77,7 +77,7 @@ public class WireMockExercises5dot2Test {
          * This request should be also accepted as it uses an HTTP PATCH
          */
 
-        setupStubExercise5dot2();
+        stubForCustomRequestFilter();
 
         given().
                 spec(requestSpec).
@@ -96,7 +96,7 @@ public class WireMockExercises5dot2Test {
          * This request should be also accepted as it uses an HTTP DELETE
          */
 
-        setupStubExercise5dot2();
+        stubForCustomRequestFilter();
 
         given().
                 spec(requestSpec).
@@ -116,7 +116,7 @@ public class WireMockExercises5dot2Test {
          * as it uses an HTTP GET, and thus should yield a default HTTP 404
          */
 
-        setupStubExercise5dot2();
+        stubForCustomRequestFilter();
 
         given().
                 spec(requestSpec).

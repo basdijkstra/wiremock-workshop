@@ -1,6 +1,6 @@
-package answers;
+package exercises;
 
-import answers.extensions.BasicAuthRequestFilter;
+import exercises.extensions.BasicAuthRequestFilter;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -9,11 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot1Test {
+public class WireMockExercises6dot1Test {
 
     private RequestSpecification requestSpec;
 

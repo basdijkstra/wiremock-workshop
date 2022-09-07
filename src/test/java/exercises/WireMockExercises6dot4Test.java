@@ -1,11 +1,10 @@
 package exercises;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import exercises.extensions.LogLoanRequestReceptionWithTimestamp;
-import com.github.tomakehurst.wiremock.extension.Parameters;
+import exercises.extensions.AddUuidHeaderTransformer;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -13,19 +12,19 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockExercises5dot3Test {
+public class WireMockExercises6dot4Test {
 
-    private RequestSpecification requestSpec;
+    private static RequestSpecification requestSpec;
 
     @RegisterExtension
     static WireMockExtension wiremock = WireMockExtension.newInstance().
             options(wireMockConfig().
                     port(9876).
-                    extensions(new LogLoanRequestReceptionWithTimestamp())
+                    extensions(new AddUuidHeaderTransformer())
             ).build();
 
-    @BeforeEach
-    public void createRequestSpec() {
+    @BeforeAll
+    public static void createRequestSpec() {
 
         requestSpec = new RequestSpecBuilder().
             setBaseUri("http://localhost").
@@ -33,32 +32,32 @@ public class WireMockExercises5dot3Test {
             build();
     }
 
-    public void setupStubExercise5dot3() {
+    public void stubForResponseDefinitionTransformer() {
 
         wiremock.stubFor(post(urlEqualTo("/requestLoan"))
-            .withPostServeAction("log-loan-request-with-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
             .willReturn(aResponse()
-                .withStatus(201)
+                .withTransformerParameter("uuidHeaderName", "uuid")
+                .withStatus(200)
             ));
     }
 
     @Test
-    public void anIncomingLoanRequestShouldTriggerAConsoleLogMessage() {
+    public void getResponse_checkHeaders_shouldIncludeThoseAddedbyResponseDefinitionTransformer() {
 
         /***
-         * Use this test to test your implementation of the post-serve action
-         * This should result in a message with the timestamp in the desired format
-         * printed to the console
+         * Use this test to test your implementation of the response definition transformer
          */
 
-        setupStubExercise5dot3();
+        stubForResponseDefinitionTransformer();
 
         given().
             spec(requestSpec).
         when().
-            post("/requestLoan").
+            get("/response-definition-transformer").
         then().
             assertThat().
-            statusCode(201);
+            statusCode(200).
+        and().
+            header("uuid", org.hamcrest.Matchers.matchesPattern("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"));
     }
 }

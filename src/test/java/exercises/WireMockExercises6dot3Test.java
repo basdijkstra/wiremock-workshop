@@ -1,8 +1,8 @@
-package answers;
+package exercises;
 
-import answers.extensions.LogLoanRequestReceptionWithTimestamp;
-import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import exercises.extensions.LogLoanRequestReceptionWithTimestamp;
+import com.github.tomakehurst.wiremock.extension.Parameters;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers5dot3Test {
+public class WireMockExercises6dot3Test {
 
     private RequestSpecification requestSpec;
 
@@ -33,7 +33,7 @@ public class WireMockAnswers5dot3Test {
             build();
     }
 
-    public void setupStubExercise5dot3() {
+    public void stubForPostServeAction() {
 
         wiremock.stubFor(post(urlEqualTo("/requestLoan"))
             .withPostServeAction("log-loan-request-with-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
@@ -51,7 +51,7 @@ public class WireMockAnswers5dot3Test {
          * printed to the console
          */
 
-        setupStubExercise5dot3();
+        stubForPostServeAction();
 
         given().
             spec(requestSpec).
