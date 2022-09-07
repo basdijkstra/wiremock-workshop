@@ -1,14 +1,30 @@
 package examples;
 
 import com.github.tomakehurst.wiremock.common.DateTimeUnit;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.http.Fault;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static io.restassured.RestAssured.given;
 
 @WireMockTest(httpPort = 9876)
-public class WireMockExamples {
+public class WireMockExamplesTest {
+
+    @RegisterExtension
+    static WireMockExtension wiremock = WireMockExtension.newInstance().
+            options(wireMockConfig().
+                    port(9876).
+                    extensions(new ResponseTemplateTransformer(true))
+            ).build();
 
     public void helloWorld() {
 
@@ -150,7 +166,7 @@ public class WireMockExamples {
 
     public void setupStubResponseTemplatingHttpMethod() {
 
-        stubFor(any(urlEqualTo("/template-http-method"))
+        wiremock.stubFor(any(urlEqualTo("/template-http-method"))
             .willReturn(aResponse()
                 .withBody("You used an HTTP {{request.method}}")
                 .withTransformers("response-template")
@@ -164,5 +180,48 @@ public class WireMockExamples {
                 withBody("{{jsonPath request.body '$.book.title'}}").
                 withTransformers("response-template")
             ));
+    }
+
+    private RequestSpecification requestSpec;
+
+    @BeforeEach
+    public void createRequestSpec() {
+
+        requestSpec = new RequestSpecBuilder().
+                setBaseUri("http://localhost").
+                setPort(9876).
+                build();
+    }
+
+    public void setupHelloWorldStub() {
+
+        stubFor(
+                get(
+                        urlEqualTo("/hello-world")
+                )
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", "text/plain")
+                                        .withStatus(200)
+                                        .withBody("Hello world!"))
+        );
+    }
+
+    @Test
+    public void helloWorldVerificationTest() {
+
+        setupHelloWorldStub();
+
+        given().
+                spec(requestSpec).
+        when().
+                get("/hello-world").
+        then().
+                assertThat().
+                statusCode(200).
+        and().
+                body(org.hamcrest.Matchers.equalTo("Hello world!"));
+
+        verify(exactly(1), getRequestedFor(urlEqualTo("/hello-world")));
     }
 }
