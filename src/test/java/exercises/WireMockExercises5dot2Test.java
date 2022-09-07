@@ -1,7 +1,7 @@
 package exercises;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import exercises.extensions.MultipleHttpVerbsMatcher;
+import exercises.extensions.RejectedHttpVerbsMatcher;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -24,7 +24,7 @@ public class WireMockExercises5dot2Test {
     static WireMockExtension wiremock = WireMockExtension.newInstance().
             options(wireMockConfig().
                     port(9876).
-                    extensions(new MultipleHttpVerbsMatcher())
+                    extensions(new RejectedHttpVerbsMatcher())
             ).build();
 
     @BeforeEach
@@ -39,75 +39,91 @@ public class WireMockExercises5dot2Test {
     public void setupStubExercise5dot2() {
 
         List<String> verbs = new ArrayList<>();
-        verbs.add("GET");
-        verbs.add("POST");
+        verbs.add("PUT");
+        verbs.add("PATCH");
+        verbs.add("DELETE");
 
-        wiremock.stubFor(requestMatching("multiple-verbs-matcher",
-                        Parameters.one("acceptedVerbs", verbs))
+        wiremock.stubFor(requestMatching("rejected-verbs-matcher",
+                        Parameters.one("rejectedVerbs", verbs))
             .willReturn(aResponse()
-                .withStatus(200)
-                .withBody("Your HTTP verb has been accepted!")
+                .withStatus(405)
             ));
     }
 
     @Test
-    public void anIncomingHttpGETShouldBeAccepted() {
+    public void anIncomingHttpPUTShouldBeRejected() {
 
         /***
          * Use this test to test your implementation of the custom matcher
-         * This request should be accepted as it uses an HTTP GET
+         * This request should be rejected as it uses an HTTP PUT
          */
 
         setupStubExercise5dot2();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/match-multiple-verbs").
+                put("/requestLoan").
         then().
-            assertThat().
-            statusCode(200).
-        and().
-            body(org.hamcrest.Matchers.equalTo("Your HTTP verb has been accepted!"));
+                assertThat().
+                statusCode(405);
     }
 
     @Test
-    public void anIncomingHttpPOSTShouldAlsoBeMatched() {
+    public void anIncomingHttpPATCHShouldAlsoBeRejected() {
 
         /***
          * Use this test to test your implementation of the custom matcher
-         * This request should be also accepted as it uses an HTTP POST
+         * This request should be also accepted as it uses an HTTP PATCH
          */
 
         setupStubExercise5dot2();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            post("/match-multiple-verbs").
+                patch("/requestLoan").
         then().
-            assertThat().
-            statusCode(200).
-        and().
-            body(org.hamcrest.Matchers.equalTo("Your HTTP verb has been accepted!"));
+                assertThat().
+                statusCode(405);
     }
 
     @Test
-    public void anIncomingHttpPATCHShouldNotBeMatched() {
+    public void anIncomingHttpDELETEShouldAlsoBeRejected() {
 
         /***
          * Use this test to test your implementation of the custom matcher
-         * This request should not be accepted as it uses an HTTP PATCH
+         * This request should be also accepted as it uses an HTTP DELETE
          */
 
         setupStubExercise5dot2();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            patch("/match-multiple-verbs").
+                delete("/requestLoan").
         then().
-            assertThat().
-            statusCode(404);
+                assertThat().
+                statusCode(405);
+    }
+
+    @Test
+    public void anIncomingHttpGETShouldNotBeMatched() {
+
+        /***
+         * Use this test to test your implementation of the custom matcher
+         * This request should not be matched by our custom matcher
+         * as it uses an HTTP GET, and thus should yield a default HTTP 404
+         */
+
+        setupStubExercise5dot2();
+
+        given().
+                spec(requestSpec).
+        when().
+                get("/requestLoan").
+        then().
+                assertThat().
+                statusCode(404);
     }
 }
