@@ -113,6 +113,18 @@ public class WireMockExamplesTest {
         );
     }
 
+    public void setupStubRequestBodyValueMatching() {
+
+        stubFor(post(urlEqualTo("/request-body-matching"))
+                .withRequestBody(
+                        matchingJsonPath("$.fruits[?(@.banana=='2')]")
+                )
+                .willReturn(aResponse()
+                        .withStatus(200)
+                )
+        );
+    }
+
     public void setupStubReturningErrorCode() {
 
         stubFor(get(urlEqualTo("/errorcode"))
