@@ -41,7 +41,7 @@ public class WireMockAnswers5Test {
     }
 
     @Test
-    public void testExercise201() {
+    public void testExercise501() {
 
         setupStubServiceUnavailable();
 
@@ -67,7 +67,7 @@ public class WireMockAnswers5Test {
             "1500",
             "2000"
     })
-    public void testExercise202(int loanAmount) {
+    public void testExercise502(int loanAmount) {
 
         setupStubServiceUnavailable();
 
