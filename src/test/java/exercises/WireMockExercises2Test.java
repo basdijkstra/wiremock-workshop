@@ -40,7 +40,7 @@ public class WireMockExercises2Test {
          * under 'Setting the response status message'
          * for an example of how to do this
          ************************************************/
-
+        stubFor(post("/requestLoan").willReturn(aResponse().withStatus(503).withStatusMessage("Loan processor service unavailable")));
     }
 
     public void setupStubExercise202() {
@@ -53,6 +53,11 @@ public class WireMockExercises2Test {
          * Respond with status code 200, but only after a
          * fixed delay of 3000 milliseconds.
          ************************************************/
+        stubFor(
+                post("/requestLoan")
+                .withHeader("speed", equalTo("slow"))
+                .willReturn(ok().withFixedDelay(3000))
+        );
 
     }
 
@@ -65,7 +70,11 @@ public class WireMockExercises2Test {
          *
          * Respond with a Fault of type RANDOM_DATA_THEN_CLOSE
          ************************************************/
-
+        stubFor(
+                post("/requestLoan")
+                        .withCookie("session", equalTo("invalid"))
+                        .willReturn(aResponse().withFault(Fault.RANDOM_DATA_THEN_CLOSE))
+        );
     }
 
     public void setupStubExercise204() {
