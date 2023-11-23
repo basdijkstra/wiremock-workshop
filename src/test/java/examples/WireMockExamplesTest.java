@@ -1,7 +1,6 @@
 package examples;
 
 import com.github.tomakehurst.wiremock.common.DateTimeUnit;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -20,11 +19,9 @@ import static io.restassured.RestAssured.given;
 public class WireMockExamplesTest {
 
     @RegisterExtension
-    static WireMockExtension wiremock = WireMockExtension.newInstance().
-            options(wireMockConfig().
-                    port(9876).
-                    extensions(new ResponseTemplateTransformer(true))
-            ).build();
+    static WireMockExtension wiremock = WireMockExtension.newInstance()
+            .options(wireMockConfig().port(9876).globalTemplating(true))
+            .build();
 
     public void helloWorld() {
 

@@ -1,6 +1,5 @@
 package exercises;
 
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -21,11 +20,9 @@ public class WireMockExercises4Test {
     private RequestSpecification requestSpec;
 
     @RegisterExtension
-    static WireMockExtension wiremock = WireMockExtension.newInstance().
-            options(wireMockConfig().
-                    port(9876).
-                    extensions(new ResponseTemplateTransformer(true))
-            ).build();
+    static WireMockExtension wiremock = WireMockExtension.newInstance()
+            .options(wireMockConfig().port(9876).globalTemplating(true))
+            .build();
 
     @BeforeEach
     public void createRequestSpec() {
