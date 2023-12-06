@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
@@ -35,8 +38,11 @@ public class WireMockAnswers6dot3Test {
 
     public void stubForServeEventListener() {
 
+        Map<String, Object> params = new HashMap<>();
+        params.put("format", "dd-MM-yyyy HH:mm:ss");
+
         wiremock.stubFor(post(urlEqualTo("/requestLoan"))
-                .withServeEventListener("log-loan-request-with-timestamp", Parameters.one("format", "dd-MM-yyyy HH:mm:ss"))
+                .withServeEventListener("log-loan-request-with-timestamp", Parameters.from(params))
                 .willReturn(aResponse()
                         .withStatus(201)
                 ));
