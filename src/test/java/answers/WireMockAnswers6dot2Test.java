@@ -74,7 +74,7 @@ public class WireMockAnswers6dot2Test {
 
         /***
          * Use this test to test your implementation of the custom matcher
-         * This request should be also accepted as it uses an HTTP PATCH
+         * This request should also be rejected as it uses an HTTP PATCH
          */
 
         stubForCustomRequestFilter();
@@ -93,7 +93,7 @@ public class WireMockAnswers6dot2Test {
 
         /***
          * Use this test to test your implementation of the custom matcher
-         * This request should be also accepted as it uses an HTTP DELETE
+         * This request should also be rejected as it uses an HTTP DELETE
          */
 
         stubForCustomRequestFilter();
