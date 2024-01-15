@@ -45,7 +45,7 @@ public class WireMockAnswers3Test {
         );
 
         stubFor(post(urlEqualTo("/requestLoan"))
-                .inScenario("Loan application")
+                .inScenario("Loan processing")
                 .whenScenarioStateIs(Scenario.STARTED)
                 .withRequestBody(equalTo("Loan ID: 12345"))
                 .willReturn(aResponse()
@@ -55,7 +55,7 @@ public class WireMockAnswers3Test {
         );
 
         stubFor(get(urlEqualTo("/loan/12345"))
-                .inScenario("Loan application")
+                .inScenario("Loan processing")
                 .whenScenarioStateIs("LOAN_GRANTED")
                 .willReturn(aResponse()
                         .withStatus(200)
