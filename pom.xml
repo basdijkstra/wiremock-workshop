@@ -6,8 +6,8 @@
 	<version>1.0.0</version>
 	<description>Project containing examples, exercises and answers for my open source WireMock workshop</description>
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 		<wiremock.version>3.5.4</wiremock.version>
 		<junit.version>5.10.2</junit.version>
 		<restassured.version>5.4.0</restassured.version>
