@@ -90,7 +90,7 @@ public class WireMockAnswers2Test {
          * Create a stub that will respond to a POST request
          * to /requestLoan with status code 200,
          * but only if:
-         * - the 'backgroundCheck' header has value 'OK'
+         * - the 'backgroundCheck' header has value 'OK', OR
          * - the 'backgroundCheck' header is not present
          ************************************************/
 
