@@ -6,8 +6,7 @@
 	<version>1.0.0</version>
 	<description>Project containing examples, exercises and answers for my open source WireMock workshop</description>
 	<properties>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
+		<maven.compiler.release>17</maven.compiler.release>
 		<wiremock.version>3.9.2</wiremock.version>
 		<junit.version>5.11.3</junit.version>
 		<restassured.version>5.5.0</restassured.version>
@@ -44,12 +43,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-nop</artifactId>
 			<version>${slf4j.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
