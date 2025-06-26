@@ -28,12 +28,12 @@ public class WireMockAnswers1Test {
 
 		/************************************************
 		 * Create a stub that will respond to a POST
-		 * to /requestLoan with an HTTP status code 200
+		 * to /requestLoan with an HTTP status code 201
 		 ************************************************/
 
 		stubFor(post(urlEqualTo("/requestLoan"))
 				.willReturn(aResponse()
-						.withStatus(200)
+						.withStatus(201)
 				));
 	}
 
@@ -80,7 +80,7 @@ public class WireMockAnswers1Test {
 				post("/requestLoan").
 		then().
 				assertThat().
-				statusCode(200);
+				statusCode(201);
 	}
 
 	@Test

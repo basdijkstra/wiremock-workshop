@@ -27,7 +27,7 @@ public class WireMockExercises1Test {
 
 		/************************************************
 		 * Create a stub that will respond to a POST
-		 * to /requestLoan with an HTTP status code 200
+		 * to /requestLoan with an HTTP status code 201
 		 ************************************************/
 
 	}
@@ -67,7 +67,7 @@ public class WireMockExercises1Test {
 				post("/requestLoan").
 		then().
 				assertThat().
-				statusCode(200);
+				statusCode(201);
 	}
 
 	@Test
