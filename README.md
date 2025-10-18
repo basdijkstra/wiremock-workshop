@@ -14,7 +14,7 @@ This workshop covers the following topics:
 
 How does it work?
 ---
-You can go through all of the materials in your own time, at your own pace. The slides explain the concepts, and you can use the exercises to practice those concepts yourself.
+You can go through all the materials in your own time, at your own pace. The slides explain the concepts, and you can use the exercises to practice those concepts yourself.
 
 All exercises come with REST Assured-based tests that verify the implementation of your mocks. The answers to the exercises are supplied as a reference.
 
@@ -22,7 +22,7 @@ I've taken care of all the setup, so there shouldn't be a need to configure anyt
 
 What do I need?
 ---
-A Java JDK (version 17 is recommended) and Maven. That's it.
+A Java JDK (version 17 or newer) and Maven. That's it.
 
 Slides
 ---
@@ -30,8 +30,8 @@ The .odp, .pdf and .pptx files in the root folder contain all slides from the wo
 
 Comments? Saying thanks?
 ---
-Feel free to file an issue here or send me an email at bas@ontestautomation.com.
+Feel free to file an issue here or email me at bas@ontestautomation.com.
 
 I'd rather have you deliver the workshop instead...
 ---
-Sure, I'd love to. Again, send me an email and I'll be happy to discuss options. In house, online, or at your conference, I'm sure we can work something out.
+Sure, I'd love to. Again, email me and I'll be happy to discuss options. In house, online, or at your conference, I'm sure we can work something out.
