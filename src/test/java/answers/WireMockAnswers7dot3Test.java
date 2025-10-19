@@ -16,7 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers6dot3Test {
+public class WireMockAnswers7dot3Test {
 
     private RequestSpecification requestSpec;
 

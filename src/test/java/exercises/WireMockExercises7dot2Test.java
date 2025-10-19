@@ -1,8 +1,8 @@
-package answers;
+package exercises;
 
-import answers.extensions.RejectedHttpVerbsMatcher;
-import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import exercises.extensions.RejectedHttpVerbsMatcher;
+import com.github.tomakehurst.wiremock.extension.Parameters;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers6dot2Test {
+public class WireMockExercises7dot2Test {
 
     private RequestSpecification requestSpec;
 
@@ -61,12 +61,12 @@ public class WireMockAnswers6dot2Test {
         stubForCustomRequestFilter();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            put("/requestLoan").
+                put("/requestLoan").
         then().
-            assertThat().
-            statusCode(405);
+                assertThat().
+                statusCode(405);
     }
 
     @Test
@@ -80,12 +80,12 @@ public class WireMockAnswers6dot2Test {
         stubForCustomRequestFilter();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            patch("/requestLoan").
+                patch("/requestLoan").
         then().
-            assertThat().
-            statusCode(405);
+                assertThat().
+                statusCode(405);
     }
 
     @Test
@@ -99,12 +99,12 @@ public class WireMockAnswers6dot2Test {
         stubForCustomRequestFilter();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            delete("/requestLoan").
+                delete("/requestLoan").
         then().
-            assertThat().
-            statusCode(405);
+                assertThat().
+                statusCode(405);
     }
 
     @Test
@@ -119,11 +119,11 @@ public class WireMockAnswers6dot2Test {
         stubForCustomRequestFilter();
 
         given().
-            spec(requestSpec).
+                spec(requestSpec).
         when().
-            get("/requestLoan").
+                get("/requestLoan").
         then().
-            assertThat().
-            statusCode(404);
+                assertThat().
+                statusCode(404);
     }
 }

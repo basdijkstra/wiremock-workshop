@@ -82,18 +82,18 @@ public class WireMockAnswers2Test {
 
         /************************************************
          * Create a stub that will respond to a POST request
-         * to /requestLoan with status code 200,
+         * to /requestLoan with status code 401,
          * but only if:
-         * - the 'backgroundCheck' header has value 'OK', OR
-         * - the 'backgroundCheck' header is not present
+         * - the 'Authorization' header has value 'Bearer invalid', OR
+         * - the 'Authorization' header is not present
          ************************************************/
 
         stubFor(post(urlEqualTo("/requestLoan"))
-                .withHeader("backgroundCheck",
-                        equalTo("OK").or(absent())
+                .withHeader("Authorization",
+                        equalTo("Bearer invalid").or(absent())
                 )
                 .willReturn(aResponse()
-                        .withStatus(200))
+                        .withStatus(401))
         );
     }
 
@@ -192,12 +192,12 @@ public class WireMockAnswers2Test {
         given().
                 spec(requestSpec).
         and().
-                header("backgroundCheck", "OK").
+                auth().oauth2("invalid").
         when().
                 post("/requestLoan").
         then().
                 assertThat().
-                statusCode(200);
+                statusCode(401);
 
         given().
                 spec(requestSpec).
@@ -205,12 +205,12 @@ public class WireMockAnswers2Test {
                 post("/requestLoan").
         then().
                 assertThat().
-                statusCode(200);
+                statusCode(401);
 
         given().
                 spec(requestSpec).
         and().
-                header("backgroundCheck", "FAILED").
+                auth().oauth2("valid").
         when().
                 post("/requestLoan").
         then().
