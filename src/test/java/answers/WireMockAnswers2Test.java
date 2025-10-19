@@ -33,18 +33,12 @@ public class WireMockAnswers2Test {
         /************************************************
          * Create a stub that will respond to all POST
          * requests to /requestLoan
-         * with HTTP status code 503 and a status message
-         * equal to 'Loan processor service unavailable'
-         *
-         * Have a look at https://wiremock.org/docs/stubbing/
-         * under 'Setting the response status message'
-         * for an example of how to do this
+         * with HTTP status code 503
          ************************************************/
 
         stubFor(post(urlEqualTo("/requestLoan"))
                 .willReturn(aResponse()
                         .withStatus(503)
-                        .withStatusMessage("Loan processor service unavailable")
                 ));
     }
 
@@ -141,7 +135,7 @@ public class WireMockAnswers2Test {
                 assertThat().
                 statusCode(503).
         and().
-                statusLine(org.hamcrest.Matchers.containsString("Loan processor service unavailable"));
+                statusLine(org.hamcrest.Matchers.containsString("Service Unavailable"));
     }
 
     @Test
