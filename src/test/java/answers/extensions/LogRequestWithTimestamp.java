@@ -15,6 +15,11 @@ public class LogRequestWithTimestamp implements ServeEventListener {
     }
 
     @Override
+    public boolean applyGlobally() {
+        return false;
+    }
+
+    @Override
     public void afterComplete(ServeEvent serveEvent, Parameters parameters) {
 
         /**
