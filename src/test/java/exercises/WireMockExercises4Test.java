@@ -52,6 +52,20 @@ public class WireMockExercises4Test {
     public void setupStubExercise402() {
 
         /************************************************
+         * Create a stub that listens at path /customers/<customerId>
+         * (use urlPathMatching() to do so, valid customer IDs are exactly
+         * five digits long, i.e., matching [0-9]{5}), and responds to all
+         * GET requests with HTTP status code 200 and a response body containing
+         * the text 'Hello, customer <customerId>',
+         * where <customerId> is the value of the path parameter
+         * extracted from the endpoint
+         ************************************************/
+
+    }
+
+    public void setupStubExercise403() {
+
+        /************************************************
          * Create a stub that listens at path /echo-loan-amount
          * and responds to all POST requests with HTTP
          * status code 200 and a response body containing
@@ -82,22 +96,51 @@ public class WireMockExercises4Test {
                 body(org.hamcrest.Matchers.equalTo("Listening on port 9876"));
     }
 
+    @ParameterizedTest(name = "User ID {0} is echoed in the response correctly")
+    @CsvSource({
+            "12212",
+            "12323",
+            "98765"
+    })
+    public void testExercise402(int customerId) {
+
+        /***
+         * Use this test to test your implementation of exercise 402
+         */
+
+        setupStubExercise402();
+
+        given().
+                spec(requestSpec).
+        and().
+                pathParam("customerId", customerId).
+        when().
+                get("/customers/{customerId}").
+        then().
+                assertThat().
+                statusCode(200).
+        and().
+                body(org.hamcrest.Matchers.equalTo(
+                        String.format("Hello, customer %d", customerId)
+                ));
+    }
+
     @ParameterizedTest(name = "Loan amount {0} is echoed in the response correctly")
     @CsvSource({
             "1000",
             "1500",
             "3000"
     })
-    public void testExercise402(int loanAmount) {
+    public void testExercise403(int loanAmount) {
 
         /***
-         * Use this test to test your implementation of exercise 402
+         * Use this test to test your implementation of exercise 403
          */
 
         LoanDetails loanDetails = new LoanDetails(loanAmount, 100, "pending");
         LoanRequest loanRequest = new LoanRequest(12212, loanDetails);
 
-        setupStubExercise402();
+        setupStubExercise403();
 
         given().
                 spec(requestSpec).
