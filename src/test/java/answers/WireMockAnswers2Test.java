@@ -101,7 +101,8 @@ public class WireMockAnswers2Test {
 
         /************************************************
          * Create a stub that will respond to a POST request
-         * to /requestLoan with status code 200,
+         * to /requestLoan with status code 200 and a plain text
+         * response body equal to 'Loan application approved',
          * but only if the loan amount specified in the
          * request body is equal to 1000.
          *
@@ -114,7 +115,8 @@ public class WireMockAnswers2Test {
                         matchingJsonPath("$.loanDetails[?(@.amount == '1000')]")
                 )
                 .willReturn(aResponse()
-                        .withStatus(200))
+                        .withStatus(200)
+                        .withBody("Loan application approved"))
         );
     }
 
@@ -234,7 +236,8 @@ public class WireMockAnswers2Test {
                 post("/requestLoan").
         then().
                 assertThat().
-                statusCode(200);
+                statusCode(200).
+                body(org.hamcrest.Matchers.equalTo("Loan application approved"));
 
         LoanDetails moreLoanDetails = new LoanDetails(1500, 100, "pending");
         LoanRequest anotherLoanRequest = new LoanRequest(12212, moreLoanDetails);
