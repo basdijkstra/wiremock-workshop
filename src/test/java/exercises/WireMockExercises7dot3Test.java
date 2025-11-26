@@ -1,4 +1,4 @@
-package answers;
+package exercises;
 
 import answers.extensions.LogRequestWithTimestamp;
 import com.github.tomakehurst.wiremock.extension.Parameters;
@@ -16,7 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 
-public class WireMockAnswers7dot3Test {
+public class WireMockExercises7dot3Test {
 
     private RequestSpecification requestSpec;
 
@@ -45,8 +45,6 @@ public class WireMockAnswers7dot3Test {
          * Then, add a single item with key 'format' and value 'dd-MM-yyyy HH:mm:ss'
          */
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("format", "dd-MM-yyyy HH:mm:ss");
 
         /**
          * Create a new stub that responds to an HTTP POST to /requestLoan and that
@@ -56,11 +54,6 @@ public class WireMockAnswers7dot3Test {
          * pass in the parameters you defined above
          */
 
-        wiremock.stubFor(post(urlEqualTo("/requestLoan"))
-                .withServeEventListener("log-loan-request-with-timestamp", Parameters.from(params))
-                .willReturn(aResponse()
-                        .withStatus(201)
-                ));
     }
 
     @Test
